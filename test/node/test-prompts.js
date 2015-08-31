@@ -25,6 +25,33 @@ describe('gulp-angular generator prompts script', function () {
     generator = new Generator();
   });
 
+  describe('check and ask for Insight', function () {
+
+    it('should ask permission', function() {
+      generator.insight = {
+        optOut: undefined,
+        track: sinon.stub(),
+        askPermission: sinon.stub()
+      };
+
+      generator.checkInsight();
+      generator.insight.track.should.have.been.called;
+      generator.insight.askPermission.should.have.been.called;
+    });
+
+    it('should ignore if permission is already asked', function() {
+      generator.insight = {
+        optOut: false,
+        track: sinon.stub(),
+        askPermission: sinon.stub()
+      };
+
+      generator.checkInsight();
+      generator.insight.track.should.have.not.been.called;
+      generator.insight.askPermission.should.have.not.been.called;
+    });
+  });
+
   describe('handle default option', function () {
     it('should ignore default if option not set', function() {
       sinon.spy(generator, 'log');
